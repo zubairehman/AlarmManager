@@ -26,6 +26,7 @@ AlarmBuilder().with(context)
               .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
               .setId("UPDATE_INFO_SYSTEM_SERVICE")
               .setAlarmType(AlarmType.REPEAT)
+              .build()
               .setAlarm()
 ```
 Note that you can get a builder object for later use, as shown in the code below:
@@ -35,7 +36,9 @@ val builder = AlarmBuilder().with(context)
         .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
         .setId("UPDATE_INFO_SYSTEM_SERVICE")
         .setAlarmType(AlarmType.REPEAT)
-        .setAlarm()
+        .build()
+        
+builder?.setAlarm()
 ```
 
 ### Register listener
@@ -55,6 +58,11 @@ override fun onPause() {
     super.onPause()
     builder?.removeListener(this)
 }
+```
+### Cancel alarm
+In-order to cancel your alarm just call `cancelAlarm()` as shown below:
+``` kotlin
+builder?.cancelAlarm()
 ```
 ### Callback
 The `perform()` method will be called once the desired time has been reached, you can write your logic in this method as shown below:
@@ -83,6 +91,7 @@ class MainActivity : AppCompatActivity(), AlarmListener {
                 .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                 .setId("UPDATE_INFO_SYSTEM_SERVICE")
                 .setAlarmType(AlarmType.REPEAT)
+                .build()
 
         //setting click listeners
         btnSetAlarm.setOnClickListener {
@@ -105,7 +114,7 @@ class MainActivity : AppCompatActivity(), AlarmListener {
     }
 
     override fun perform(context: Context, intent: Intent) {
-        Timber.i("Do your work here")
+        Log.i("Alarm", "Do your work here")
     }
 }
 
