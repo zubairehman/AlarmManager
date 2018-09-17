@@ -3,6 +3,21 @@
 
 ## How to use
 
+Add it in your root `build.gradle` at the end of repositories:
+```groovy
+allprojects {
+    repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+    }
+}
+```
+Add the dependency
+```
+dependencies {
+    implementation 'com.github.zubairehman:AlarmManager:v1.0.0-alpha01'
+}
+```
 Using `AlarmManager` is really simple and easy, all you need to do is to pass in your configuration and start getting notifications in your activity/fragment. This could further be illustrated in the example below:
 ``` kotlin
 AlarmBuilder().with(context)
