@@ -3,6 +3,7 @@ This repository contains a sample code about AlarmManager.
 
 ## How to use
 
+Using `AlarmManager` is really simple and easy, all you need to do is to pass in your configuration and start getting notifications in your activity/fragment. This could further be illustrated in the example below:
 ``` kotlin
 AlarmBuilder().with(context)
               .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
@@ -10,8 +11,18 @@ AlarmBuilder().with(context)
               .setAlarmType(AlarmType.REPEAT)
               .setAlarm()
 ```
+Note that you can get a builder object for later use, as shown in the code below:
 
-register listener in `onResume` as shown below:
+``` kotlin
+val builder = AlarmBuilder().with(context)
+        .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
+        .setId("UPDATE_INFO_SYSTEM_SERVICE")
+        .setAlarmType(AlarmType.REPEAT)
+        .setAlarm()
+```
+
+### Register listener
+In-order to get notified, you need to register a listener in `onResume` as shown below:
 
 ``` kotlin
 override fun onResume() {
@@ -19,16 +30,26 @@ override fun onResume() {
     builder?.addListener(this)
 }
 ```
+### Un-Register listener
 
-un-register listener in `onPause` as shown below:
+In-order to prevent your activity listening to un-attended events you need to un-register your listener in `onPause` as shown below:
 ``` kotlin
 override fun onPause() {
     super.onPause()
     builder?.removeListener(this)
 }
 ```
+### Callback
+The `perform()` method will be called once the desired time has been reached, you can write your logic in this method as shown below:
+``` kotlin
+override fun perform(context: Context, intent: Intent) {
+    Timber.i("Do your work here")
+}
+```
 
 ## Complete Example:
+
+Here is the complete code that demonstrate the use of AlarmManager:
 
 ``` kotlin
 class MainActivity : AppCompatActivity(), AlarmListener {
