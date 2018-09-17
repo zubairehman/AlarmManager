@@ -1,15 +1,14 @@
-package com.zubair.alarmmanager.activities
+package com.zubair.alarmmanager
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.zubair.alarmmanager.R
+import android.util.Log
 import com.zubair.alarmmanager.builder.AlarmBuilder
 import com.zubair.alarmmanager.enums.AlarmType
 import com.zubair.alarmmanager.interfaces.AlarmListener
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), AlarmListener {
@@ -26,6 +25,7 @@ class MainActivity : AppCompatActivity(), AlarmListener {
                 .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                 .setId("UPDATE_INFO_SYSTEM_SERVICE")
                 .setAlarmType(AlarmType.REPEAT)
+                .build()
 
         //setting click listeners
         btnSetAlarm.setOnClickListener {
@@ -48,6 +48,6 @@ class MainActivity : AppCompatActivity(), AlarmListener {
     }
 
     override fun perform(context: Context, intent: Intent) {
-        Timber.i("Do your work here")
+        Log.i("Alarm", "Do your work here")
     }
 }

@@ -6,9 +6,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import com.zubair.alarmmanager.enums.AlarmType
 import com.zubair.alarmmanager.interfaces.AlarmListener
-import timber.log.Timber
 import java.util.*
 
 class AlarmBuilder {
@@ -50,12 +50,9 @@ class AlarmBuilder {
         return this
     }
 
-//    fun setAlarmListener(alarmListener: AlarmListener): AlarmBuilder {
-//        this.alarmListener = alarmListener
-//        return this
-//    }
+    fun build(): AlarmBuilder {
+        this.alarmListenerSet = HashSet()
 
-    fun setAlarm(): AlarmBuilder {
         val alarm = Alarm(context, id, timeInMilliSeconds, alarmType, alarmListener)
 
         if (alarm.context == null) {
@@ -66,16 +63,12 @@ class AlarmBuilder {
             throw IllegalStateException("Id can't be null!")
         }
 
-        //setting alarm
-        initAlarm()
-
         return this
     }
 
     private fun initAlarm() {
 
         //initialization
-        this.alarmListenerSet = HashSet()
         this.alarmManager = this.context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         //creating intent
@@ -99,7 +92,7 @@ class AlarmBuilder {
                 AlarmType.ONE_TIME -> this.alarmManager!!.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ensurePositiveTime, this.pendingIntent)
             }
         } else {
-            Timber.e("Alarm already running.!")
+            Log.e("Alarm", "Alarm already running.!")
         }
     }
 
@@ -117,11 +110,15 @@ class AlarmBuilder {
     }
 
     //General Methods:------------------------------------------------------------------------------
+    fun setAlarm() {
+        initAlarm()
+    }
+
     fun cancelAlarm() {
         this.alarmListenerSet!!.clear()
         this.alarmManager!!.cancel(this.pendingIntent)
         this.context!!.unregisterReceiver(this.broadcastReceiver)
-        Timber.e("Alarm has been canceled..!")
+        Log.e("Alarm", "Alarm has been canceled..!")
     }
 
     @Synchronized
