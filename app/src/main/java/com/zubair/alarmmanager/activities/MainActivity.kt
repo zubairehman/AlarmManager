@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(), AlarmListener {
                     .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                     .setId("UPDATE_INFO_SYSTEM_SERVICE")
                     .setAlarmType(AlarmType.REPEAT)
-                    .setAlarmListener(this)
                     .build()
         }
 
@@ -37,7 +36,17 @@ class MainActivity : AppCompatActivity(), AlarmListener {
         }
     }
 
-    override fun perform(context: Context?, intent: Intent?) {
+    override fun onResume() {
+        super.onResume()
+        builder?.addListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        builder?.removeListener(this)
+    }
+
+    override fun perform(context: Context, intent: Intent) {
         Timber.i("Do your work here")
     }
 }
