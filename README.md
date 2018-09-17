@@ -1,5 +1,5 @@
 # AlarmManager
-This repository contains a sample code about AlarmManager.
+`AlarmManager` provides access to the system alarm services. These allow you to schedule your application to be run at some point in the future. When an alarm goes off, the Intent that had been registered for it is broadcast by the system that you can receive inside your activity. Registered alarms are retained while the device is asleep (and can optionally wake the device up if they go off during that time), but will be cleared if it is turned off and rebooted. Alarm has been set automatically on boot completed. 
 
 ## How to use
 
