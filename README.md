@@ -59,6 +59,11 @@ override fun onPause() {
     builder?.removeListener(this)
 }
 ```
+### Cancel alarm
+In-order to cancel your alarm just call `cancelAlarm()` as shown below:
+``` kotlin
+builder?.cancelAlarm()
+```
 ### Callback
 The `perform()` method will be called once the desired time has been reached, you can write your logic in this method as shown below:
 ``` kotlin
