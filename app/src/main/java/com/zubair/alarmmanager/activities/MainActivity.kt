@@ -21,14 +21,15 @@ class MainActivity : AppCompatActivity(), AlarmListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //creating alarm builder
+        builder = AlarmBuilder().with(this)
+                .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
+                .setId("UPDATE_INFO_SYSTEM_SERVICE")
+                .setAlarmType(AlarmType.REPEAT)
+
         //setting click listeners
         btnSetAlarm.setOnClickListener {
-
-            builder = AlarmBuilder().with(this)
-                    .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
-                    .setId("UPDATE_INFO_SYSTEM_SERVICE")
-                    .setAlarmType(AlarmType.REPEAT)
-                    .build()
+            builder?.setAlarm()
         }
 
         btnCancelAlarm.setOnClickListener {

@@ -17,7 +17,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
                     .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                     .setId("UPDATE_INFO_SYSTEM_SERVICE")
                     .setAlarmType(AlarmType.REPEAT)
-                    .build()
+                    .setAlarm()
         }
     }
 }

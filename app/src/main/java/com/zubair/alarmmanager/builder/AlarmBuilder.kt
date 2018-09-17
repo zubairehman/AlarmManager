@@ -55,7 +55,7 @@ class AlarmBuilder {
 //        return this
 //    }
 
-    fun build(): AlarmBuilder {
+    fun setAlarm(): AlarmBuilder {
         val alarm = Alarm(context, id, timeInMilliSeconds, alarmType, alarmListener)
 
         if (alarm.context == null) {
@@ -67,12 +67,12 @@ class AlarmBuilder {
         }
 
         //setting alarm
-        setAlarm()
+        initAlarm()
 
         return this
     }
 
-    private fun setAlarm() {
+    private fun initAlarm() {
 
         //initialization
         this.alarmListenerSet = HashSet()
@@ -101,9 +101,6 @@ class AlarmBuilder {
         } else {
             Timber.e("Alarm already running.!")
         }
-
-        //setting alarm listener
-//        addListener(this.alarmListener)
     }
 
     private fun getBroadcastReceiver(): BroadcastReceiver {
