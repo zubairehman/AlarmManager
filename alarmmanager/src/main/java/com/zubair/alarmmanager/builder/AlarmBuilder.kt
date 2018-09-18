@@ -32,6 +32,8 @@ class AlarmBuilder {
 
     fun with(context: Context): AlarmBuilder {
         this.context = context
+        this.alarmListenerSet = HashSet()
+        this.alarmManager = this.context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         return this
     }
 
@@ -50,8 +52,7 @@ class AlarmBuilder {
         return this
     }
 
-    fun build(): AlarmBuilder {
-        this.alarmListenerSet = HashSet()
+    fun setAlarm(): AlarmBuilder {
 
         val alarm = Alarm(context, id, timeInMilliSeconds, alarmType, alarmListener)
 
@@ -63,27 +64,27 @@ class AlarmBuilder {
             throw IllegalStateException("Id can't be null!")
         }
 
+        initAlarm()
+
         return this
     }
 
+    //General Methods:------------------------------------------------------------------------------
     private fun initAlarm() {
 
-        //initialization
-        this.alarmManager = this.context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         //creating intent
-        val intent = Intent(id)
-        val alarmRunning = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_NO_CREATE) != null
+        val intent = Intent(this.id)
+        val alarmRunning = PendingIntent.getBroadcast(this.context, REQUEST_CODE, intent, PendingIntent.FLAG_NO_CREATE) != null
 
         //setting broadcast
         this.broadcastReceiver = this.getBroadcastReceiver()
         this.context!!.registerReceiver(
                 this.broadcastReceiver,
-                IntentFilter(id))
+                IntentFilter(this.id))
 
         //setting alarm
         val ensurePositiveTime = Math.max(this.timeInMilliSeconds, 0L)
-        this.pendingIntent = PendingIntent.getBroadcast(this.context, REQUEST_CODE, intent, 0)
+        this.pendingIntent = PendingIntent.getBroadcast(this.context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         //Check if alarm is already running
         if (!alarmRunning) {
@@ -93,25 +94,8 @@ class AlarmBuilder {
             }
         } else {
             Log.e("Alarm", "Alarm already running.!")
+            updateAlarm()
         }
-    }
-
-    private fun getBroadcastReceiver(): BroadcastReceiver {
-
-        return object : BroadcastReceiver() {
-
-            override fun onReceive(context: Context, intent: Intent) {
-
-                for (alarmListener in this@AlarmBuilder.alarmListenerSet!!) {
-                    alarmListener.perform(context, intent)
-                }
-            }
-        }
-    }
-
-    //General Methods:------------------------------------------------------------------------------
-    fun setAlarm() {
-        initAlarm()
     }
 
     fun cancelAlarm() {
@@ -121,6 +105,34 @@ class AlarmBuilder {
         Log.e("Alarm", "Alarm has been canceled..!")
     }
 
+    private fun updateAlarm() {
+
+        //calculating alarm time and creating pending intent
+        val intent = Intent(this.id)
+        val ensurePositiveTime = Math.max(this.timeInMilliSeconds, 0L)
+        this.pendingIntent = PendingIntent.getBroadcast(this.context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        //removing previously running alarm
+        this.alarmManager!!.cancel(this.pendingIntent)
+        this.context!!.unregisterReceiver(this.broadcastReceiver)
+
+        //setting broadcast
+        this.broadcastReceiver = this.getBroadcastReceiver()
+        this.context!!.registerReceiver(
+                this.broadcastReceiver,
+                IntentFilter(this.id))
+
+        //Check if alarm is already running
+        when (this.alarmType) {
+            AlarmType.REPEAT -> this.alarmManager!!.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), ensurePositiveTime, this.pendingIntent)
+            AlarmType.ONE_TIME -> this.alarmManager!!.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ensurePositiveTime, this.pendingIntent)
+        }
+
+        Log.e("Alarm", "Alarm updated..!")
+
+    }
+
+    //Listeners:------------------------------------------------------------------------------------
     @Synchronized
     fun addListener(alarmListener: AlarmListener?) {
         if (alarmListener == null) {
@@ -137,5 +149,19 @@ class AlarmBuilder {
         }
 
         this.alarmListenerSet!!.remove(alarmListener)
+    }
+
+    //Broadcast Receiver:---------------------------------------------------------------------------
+    private fun getBroadcastReceiver(): BroadcastReceiver {
+
+        return object : BroadcastReceiver() {
+
+            override fun onReceive(context: Context, intent: Intent) {
+
+                for (alarmListener in this@AlarmBuilder.alarmListenerSet!!) {
+                    alarmListener.perform(context, intent)
+                }
+            }
+        }
     }
 }

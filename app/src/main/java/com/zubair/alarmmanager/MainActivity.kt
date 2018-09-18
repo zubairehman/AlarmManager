@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity(), AlarmListener {
                 .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                 .setId("UPDATE_INFO_SYSTEM_SERVICE")
                 .setAlarmType(AlarmType.REPEAT)
-                .build()
 
         //setting click listeners
         btnSetAlarm.setOnClickListener {
@@ -48,6 +47,22 @@ class MainActivity : AppCompatActivity(), AlarmListener {
     }
 
     override fun perform(context: Context, intent: Intent) {
-        Log.i("Alarm", "Do your work here")
+        Log.i("Alarm", "Do your work here " + intent.action)
+
+//        // Create the notification to be shown
+//        val mBuilder = NotificationCompat.Builder(context!!, "my_app")
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setContentTitle("Alarm Manager")
+//                .setContentText(intent.action)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//
+//        // Get the Notification manager service
+//        val am = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//
+//        // Generate an Id for each notification
+//        val id = System.currentTimeMillis() / 1000
+//
+//        // Show a notification
+//        am.notify(id.toInt(), mBuilder.build())
     }
 }
