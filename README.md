@@ -26,7 +26,6 @@ AlarmBuilder().with(context)
               .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
               .setId("UPDATE_INFO_SYSTEM_SERVICE")
               .setAlarmType(AlarmType.REPEAT)
-              .build()
               .setAlarm()
 ```
 Note that you can get a builder object for later use, as shown in the code below:
@@ -36,7 +35,6 @@ val builder = AlarmBuilder().with(context)
         .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
         .setId("UPDATE_INFO_SYSTEM_SERVICE")
         .setAlarmType(AlarmType.REPEAT)
-        .build()
         
 builder?.setAlarm()
 ```
@@ -91,7 +89,6 @@ class MainActivity : AppCompatActivity(), AlarmListener {
                 .setTimeInMilliSeconds(TimeUnit.SECONDS.toMillis(10))
                 .setId("UPDATE_INFO_SYSTEM_SERVICE")
                 .setAlarmType(AlarmType.REPEAT)
-                .build()
 
         //setting click listeners
         btnSetAlarm.setOnClickListener {
