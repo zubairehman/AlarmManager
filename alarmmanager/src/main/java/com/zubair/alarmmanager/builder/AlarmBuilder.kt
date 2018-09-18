@@ -99,9 +99,18 @@ class AlarmBuilder {
     }
 
     fun cancelAlarm() {
-        this.alarmListenerSet!!.clear()
-        this.alarmManager!!.cancel(this.pendingIntent)
-        this.context!!.unregisterReceiver(this.broadcastReceiver)
+
+        this.alarmListenerSet?.clear()
+
+        if(this.pendingIntent != null) {
+            this.alarmManager?.cancel(this.pendingIntent)
+        }
+
+        if(this.broadcastReceiver != null) {
+            this.context?.unregisterReceiver(this.broadcastReceiver)
+            this.broadcastReceiver = null
+        }
+
         Log.e("Alarm", "Alarm has been canceled..!")
     }
 
