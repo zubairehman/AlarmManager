@@ -8,7 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
 import com.zubair.alarmmanager.enums.AlarmType
-import com.zubair.alarmmanager.interfaces.AlarmListener
+import com.zubair.alarmmanager.interfaces.IAlarmListener
 import java.util.*
 
 class AlarmBuilder {
@@ -17,14 +17,14 @@ class AlarmBuilder {
     private var alarmManager: AlarmManager? = null
     private var broadcastReceiver: BroadcastReceiver? = null
     private var pendingIntent: PendingIntent? = null
-    private var alarmListenerSet: MutableSet<AlarmListener>? = null
+    private var alarmListenerSet: MutableSet<IAlarmListener>? = null
 
     //builder variables
     private var context: Context? = null
     private var id: String? = null
     private var timeInMilliSeconds: Long = 0
     private var alarmType = AlarmType.ONE_TIME
-    private var alarmListener: AlarmListener? = null
+    private var alarmListener: IAlarmListener? = null
 
     companion object {
         private const val REQUEST_CODE = 111131
@@ -143,7 +143,7 @@ class AlarmBuilder {
 
     //Listeners:------------------------------------------------------------------------------------
     @Synchronized
-    fun addListener(alarmListener: AlarmListener?) {
+    fun addListener(alarmListener: IAlarmListener?) {
         if (alarmListener == null) {
             throw IllegalStateException("Listener can't be null!")
         }
@@ -152,7 +152,7 @@ class AlarmBuilder {
     }
 
     @Synchronized
-    fun removeListener(alarmListener: AlarmListener?) {
+    fun removeListener(alarmListener: IAlarmListener?) {
         if (alarmListener == null) {
             throw IllegalStateException("Listener can't be null!")
         }

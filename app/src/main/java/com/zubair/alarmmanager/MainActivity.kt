@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.zubair.alarmmanager.builder.AlarmBuilder
 import com.zubair.alarmmanager.enums.AlarmType
-import com.zubair.alarmmanager.interfaces.AlarmListener
+import com.zubair.alarmmanager.interfaces.IAlarmListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity(), AlarmListener {
+class MainActivity : AppCompatActivity(), IAlarmListener {
 
     //Alarm builder
     var builder: AlarmBuilder? = null;
